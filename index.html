@@ -1,0 +1,127 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+    <title>Health Information Form</title> 
+    <style> 
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f4; 
+            margin: 0; 
+            padding: 20px; 
+        } 
+ 
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background-color: #fff; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+        } 
+ 
+        h1 { 
+            text-align: center; 
+            color: #333; 
+        } 
+ 
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            color: #555; 
+        } 
+ 
+        input[type="number"], select, input[type="text"] { 
+            width: 100%; 
+            padding: 10px; 
+            margin-bottom: 20px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+        } 
+ 
+        input[type="submit"] { 
+            width: 100%; 
+            padding: 10px; 
+            background-color: #28a745; 
+            border: none; 
+            border-radius: 4px; 
+            color: #fff; 
+            font-size: 16px; 
+            cursor: pointer; 
+        } 
+ 
+        input[type="submit"]:hover { 
+            background-color: #218838; 
+        } 
+    </style> 
+</head> 
+<body> 
+    <div class="container"> 
+        <h1>Health Information Form</h1> 
+        <form action="/submit" method="post"> 
+            <label for="height">Height (cm):</label> 
+            <input type="number" id="height" name="height" min="50" max="250" required> 
+ 
+            <label for="weight">Weight (kg):</label> 
+            <input type="number" id="weight" name="weight" min="20" max="200" required> 
+ 
+            <label for="age">Age:</label> 
+            <input type="number" id="age" name="age" min="0" max="120" required> 
+ 
+            <label for="gender">Gender:</label> 
+            <select id="gender" name="gender" required> 
+                <option value="male">Male</option> 
+                <option value="female">Female</option> 
+                <option value="other">Other</option> 
+            </select> 
+ 
+            <label for="activity">Physical Activity Level:</label> 
+            <select id="activity" name="activity" required> 
+                <option value="sedentary">Sedentary</option> 
+                <option value="lightly_active">Lightly active</option> 
+                <option value="moderately_active">Moderately active</option> 
+                <option value="very_active">Very active</option> 
+            </select> 
+ 
+            <label for="diet">Dietary Preferences:</label> 
+            <select id="diet" name="diet" required> 
+                <option value="vegetarian">Vegetarian</option> 
+                <option value="non_vegetarian">Non-Vegetarian</option> 
+                <option value="vegan">Vegan</option> 
+                <option value="other">Other</option> 
+            </select> 
+ 
+            <label for="smoking">Smoking Habits:</label> 
+            <select id="smoking" name="smoking" required> 
+                <option value="non_smoker">Non-Smoker</option> 
+                <option value="smoker">Smoker</option> 
+            </select> 
+ 
+            <label for="alcohol">Alcohol Consumption:</label> 
+            <select id="alcohol" name="alcohol" required> 
+                <option value="no">No</option> 
+                <option value="yes">Yes</option> 
+            </select> 
+ 
+            <label for="conditions">Existing Medical Conditions:</label> 
+            <input type="text" id="conditions" name="conditions"> 
+ 
+            <label for="medications">Medications Currently Taking:</label> 
+            <input type="text" id="medications" name="medications"> 
+ 
+            <label for="family_history">Family Medical History:</label> 
+            <input type="text" id="family_history" name="family_history"> 
+ 
+            <label for="sleep">Sleep Duration (hours per night):</label> 
+            <input type="number" id="sleep" name="sleep" min="0" max="24" required>
+<label for="stress">Stress Levels:</label> 
+            <select id="stress" name="stress" required> 
+                <option value="low">Low</option> 
+                <option value="moderate">Moderate</option> 
+                <option value="high">High</option> 
+            </select> 
+ 
+            <input type="submit" value="Submit"> 
+        </form> 
+    </div> 
+</body> 
+</html>

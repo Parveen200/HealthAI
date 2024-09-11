@@ -1,0 +1,101 @@
+id,name,email,phone,specialization,qualifications,experience,clinic_address,image
+1,Dr. Arjun Patel,arjun.patel@example.com,+91-9000012345,Cardiologist,MBBSMD (Cardiology),10 years,101 Heart Clinic Delhi,https://example.com/images/arjun_patel.jpg
+2,Dr. Meera Singh,meera.singh@example.com,+91-9000012346,Orthopedic Surgeon,MBBSMS (Orthopedics),8 years,102 Bone Care Mumbai,https://example.com/images/meera_singh.jpg
+3,Dr. Rajesh Kumar,rajesh.kumar@example.com,+91-9000012347,Neurologist,MBBSDM (Neurology),12 years,103 Neuro Health Center Bangalore,https://example.com/images/rajesh_kumar.jpg
+4,Dr. Neha Gupta,neha.gupta@example.com,+91-9000012348,General Physician,MBBSMD (Internal Medicine),15 years,104 Health Clnic Hyderabad,https://example.com/images/neha_gupta.jpg
+5,Dr. Anil Sharma,anil.sharma@example.com,+91-9000012349,ENT Specialist,MBBSDLO (ENT),9 years,105 ENT Clinic Chennai,https://example.com/images/anil_sharma.jpg
+6,Dr. Priya Patel,priya.patel@example.com,+91-9000012350,Gynecologist,MBBSMD (Obstetrics and Gynecology),11 years,106 Women’s Care  Kolkata,https://example.com/images/priya_patel.jpg
+7,Dr. Rahul Mehta,rahul.mehta@example.com,+91-9000012351,Oncologist,MBBSMD (Oncology),14 years,107 Cancer Center Pune,https://example.com/images/rahul_mehta.jpg
+8,Dr. Kavita Joshi,kavita.joshi@example.com,+91-9000012352,Endocrinologist,MBBSDM (Endocrinology),7 years,108 Dibetes Care  Ahmedabad,https://example.com/images/kavita_joshi.jpg
+9,Dr. Sneha Sharma,sneha.sharma@example.com,+91-9000012353,Pediatrician,MBBSMD (Pediatrics),6 year,109 Child Clinic Jaipur,https://example.com/images/sneha_sharma.jpg
+10,Dr. Manish Verma,manish.verma@example.com,+91-9000012354,General Surgeon,MBBSMS (Surgery),13 years,110 Surgical Clinic Surat,https://example.com/images/manish_verma.jpg
+11,Dr. Ankur Singh,ankur.singh@example.com,+91-9000012355,Dermatologist,MBBSMD (Dermatology),8 years,111 Skin Health Clinic Delhi,https://example.com/images/ankur_singh.jpg
+12,Dr. Swati Agarwal,swati.agarwal@example.com,+91-9000012356,Ophthalmologist,MBBSMS (Ophthalmology),10 years,112 Eye Care Center Mumbai,https://example.com/images/swati_agarwal.jpg
+13,Dr. Vikram Singh,vikram.singh@example.com,+91-9000012357,Rheumatologist,MBBSDM (Rheumatology),12 years,113 Joint Health Clinic Bangalore,https://example.com/images/vikram_singh.jpg
+14,Dr. Richa Sharma,richa.sharma@example.com,+91-9000012358,Cardiothoracic Surgeon,MBBSMS (Cardiothoracic Surgery),4 years,114 Heart and Lung Clinic Hyderabad,https://example.com/images/richa_sharma.jpg
+15,Dr. Amit Patel,amit.patel@example.com,+91-9000012359,Nephrologist,MBBSDM (Nephrology),9 years,115 Kidney Health Center Chennai,https://example.com/images/amit_patel.jpg
+16,Dr. Pooja Mehta,pooja.mehta@example.com,+91-9000012360,Pulmonologist,MBBSMD (Pulmonology),11 years,116 Respiratory Car Clinic Kolkata,https://example.com/images/pooja_mehta.jpg
+17,Dr. Ravi Kumar,ravi.kumar@example.com,+91-9000012361,Endodontist,MBBSMDS (Endodontics),7 years,117 Denta Health Center Pune,https://example.com/images/ravi_kumar.jpg
+18,Dr. Sonali Kapoor,sonali.kapoor@example.com,+91-9000012362,Orthodontist,MBBSMDS (Orthodontics),8 years,118 Smile Clinic Ahmedabad,https://example.com/images/sonali_kapoor.jpg
+19,Dr. Deepak Sharma,deepak.sharma@example.com,+91-9000012363,Prosthodontist,MBBSMDS (Prosthodontics),6 year,119 Dental Care Clinic Jaipur,https://example.com/images/deepak_sharma.jpg
+20,Dr. Maya Joshi,maya.joshi@example.com,+91-9000012364,Periodontist,MBBSMDS (Periodontics),10 years,120 Gums and Teeth Care  Surat,https://example.com/images/maya_joshi.jpg
+21,Dr. Sanjay Agarwal,sanjay.agarwal@example.com,+91-9000012365,Internal Medicine Specialist,MBBS MD (Internal Medicine),12 years,121 Health Clinic Delhi,https://example.com/images/sanjay_agarwal.jpg
+22,Dr. Nisha Gupta,nisha.gupta@example.com,+91-9000012366,Allergist,MBBSMD (Allergy),8 years,122 Allergy Clinic Mumbai,https://example.com/images/nisha_gupta.jpg
+23,Dr. Varun Patel,varun.patel@example.com,+91-9000012367,Infectious Disease Specialist,MBBS MD (Infectious Diseases),10 years,123 Infectious Disease Center Bangalore,https://example.com/images/varun_patel.jpg
+24,Dr. Aarti Sharma,aarti.sharma@example.com,+91-9000012368,Gastroenterologist,MBBS DM (Gastroenterology),9 years,124 Digestive Health Clinic Hyderabad,htts://example.com/images/aarti_sharma.jpg
+25,Dr. Nitin Mehta,nitin.mehta@example.com,+91-9000012369,Oncologist,MBBS MD (Oncology),11 years,125 Cancer Health Center Chennai,https://examle.com/images/nitin_mehta.jpg
+26,Dr. Neeraj Kumar,neeraj.kumar@example.com,+91-9000012370,Hematologist,MBBS DM (Hematology),12 years,126 Blood Disorder Clinic Kolkata,https://example.com/images/neeraj_kumar.jpg
+27,Dr. Shikha Singh,shikha.singh@example.com,+91-9000012371,Physiatrist,MBBS MD (Physical Medicine),8 years127 Rehab Clinic, Pune,https://example.com/images/shikha_singh.jpg
+28,Dr. Pradeep Verma,pradeep.verma@example.com,+91-9000012372,Neuro Surgeon,MBBS MS (Neuro Surgery),13 years,128 Brain and Spine Clinic Ahmedabad,https://example.com/images/pradeep_verma.jpg
+29,Dr. Reema Reddy,reema.reddy@example.com,+91-9000012373,Urologist,MBBS MS (Urology),10 years,129 Urology Center Jaipur,https://example.com/images/reema_reddy.jpg
+30,Dr. Manoj Gupta,manoj.gupta@example.com,+91-9000012374,Obstetrician,MBBS MD (Obstetrics),11 years,130 Women’s ealth Clinic Surat,https://example.com/images/manoj_gupta.jpg
+31,Dr. Seema Kapoor,seema.kapoor@example.com,+91-9000012375,Reproductive Endocrinologist,MBBS DM (Rproductive Endocrinology),9 years,131 Fertility Clinic Delhi,https://example.com/images/seema_kapoor.jpg
+32,Dr. Arvind Sharma,arvind.sharma@example.com,+91-9000012376,Plastic Surgeon,MBBS MS (Plastic Surgery),12 years,132 Cosmetic Clinic Mumbai,https://example.com/images/arvind_sharma.jpg
+33,Dr. Rashmi Agarwal,rashmi.agarwal@example.com,+91-9000012377,Orthopedic Surgeon,MBBS MS (Orthopedics),11 years,133 Bone and Joint Center Bangalore,https://example.com/images/rashmi_agarwal.jpg
+34,Dr. Sumit Mehta,sumit.mehta@example.com,+91-9000012378,Cardiologist,MBBS DM (Cardiology),13 years,134 Heart Health Clinic Hyderabad,htts://example.com/images/sumit_mehta.jpg
+35,Dr. Swati Singh,swati.singh@example.com,+91-9000012379,Neurosurgeon,MBBS MCh (Neurosurgery),10 years,135 Brain Health Centr Chennai,https://example.com/images/swati_singh.jpg
+36,Dr. Akash Gupta,akash.gupta@example.com,+91-9000012380,Endocrinologist,MBBS DM (Endocrinology),8 years,136 Endocrine Clinic Kolkata,https://example.com/images/akash_gupta.jpg
+37,Dr. Charul Gupta,charul.gupta@example.com,+91-9000012381,Physiotherapist,MBBS MPT (Physiotherapy),7 years,137 hysiotherapy Center Pune,https://example.com/images/charul_gupta.jpg
+38,Dr. Vikash Sharma,vikash.sharma@example.com,+91-9000012382,Nephrologist,MBBS DM (Nephrology),12 years,138 Kidney Clinic, Ahmedabadhttps://example.com/images/vikash_sharma.jpg
+39,Dr. Isha Verma,isha.verma@example.com,+91-9000012383,Infectious Disease Specialist,MBBS MD (Infectious Diseases),9 yars,139 Infectious Disease Clinic Jaipur,https://example.com/images/isha_verma.jpg
+40,Dr. Rajiv Kumar,rajiv.kumar@example.com,+91-9000012384,Oncologist,MBBS DM (Oncology),11 years,140 Cancer Clinic Surat,https://example.com/images/rajiv_kumar.jpg
+41,Dr. Meenal Sharma,meenal.sharma@example.com,+91-9000012385,Ophthalmologist,MBBS MS (Ophthalmology),10 years,141 Eye Health Clinic Delhi,https://example.com/images/meenal_sharma.jpg
+42,Dr. Kiran Singh,kiran.singh@example.com,+91-9000012386,General Surgeon,MBBS MS (General Surgery),14 years,142 Surgical Center Mumbai,https://example.com/images/kiran_singh.jpg
+43,Dr. Ananya Patel,ananya.patel@example.com,+91-9000012387,Endodontist,MBBS MDS (Endodontics),8 years,143 Dental Clinic Bangalre,https://example.com/images/ananya_patel.jpg
+44,Dr. Rajesh Patel,rajesh.patel@example.com,+91-9000012388,Orthodontist,MBBS MDS (Orthodontics),9 years,144 Orthoontic Center Hyderabad,https://example.com/images/rajesh_patel.jpg
+45,Dr. Nidhi Gupta,nidhi.gupta@example.com,+91-9000012389,Periodontist,MBBS MDS (Periodontics),6 years,145 Gums Clinic, Chennaihttps://example.com/images/nidhi_gupta.jpg
+46,Dr. Harsh Sharma,harsh.sharma@example.com,+91-9000012390,Plastic Surgeon,MBBS MS (Plastic Surgery),11 years,14 Cosmetic Center Kolkata,https://example.com/images/harsh_sharma.jpg
+47,Dr. Anshika Agarwal,anshika.agarwal@example.com,+91-9000012391,Rheumatologist,MBBS DM (Rheumatology),8 years,147 Joint Clinic une,https://example.com/images/anshika_agarwal.jpg
+48,Dr. Suresh Singh,suresh.singh@example.com,+91-9000012392,Cardiothoracic Surgeon,MBBS MS (Cardiothoracic Surgery),3 years,148 Heart and Lung Health Center Ahmedabad,https://example.com/images/suresh_singh.jpg
+49,Dr. Pranita Sharma,pranita.sharma@example.com,+91-9000012393,Neurosurgeon,MBBS MCh (Neurosurgery),10 years,149 Brain Clinic Jaipur,https://example.com/imges/pranita_sharma.jpg
+50,Dr. Abhinav Verma,abhinav.verma@example.com,+91-9000012394,General Physician,MBBS MD (Internal Medicine),12 years,150 Health Center Surat,htps://example.com/images/abhinav_verma.jpg
+51,Dr. Pallavi Joshi,pallavi.joshi@example.com,+91-9000012395,Ophthalmologist,MBBS MS (Ophthalmology),9 years,151 Eye Care Clinic Deli,https://example.com/images/pallavi_joshi.jpg
+52,Dr. Sanjeev Kumar,sanjeev.kumar@example.com,+91-9000012396,Orthopedic Surgeon,MBBS MS (Orthopedics),11 years,152 BoneClinic Mumbai,https://example.com/images/sanjeev_kumar.jpg
+53,Dr. Ritu Sharma,ritu.sharma@example.com,+91-9000012397,Pulmonologist,MBBS MD (Pulmonology),10 years,153 Respiratory Clinic Bangalore,https://example.com/images/ritu_sharma.jpg
+54,Dr. Aman Patel,aman.patel@example.com,+91-9000012398,Endocrinologist,MBBS DM (Endocrinology),12 years,154 Endocrine Health Center Hyderabad,https://example.com/images/aman_patel.jpg
+55,Dr. Tanvi Agarwal,tanvi.agarwal@example.com,+91-9000012399,Dermatologist,MBBS MD (Dermatology),8 years,155 Skin Health Center Chenai,https://example.com/images/tanvi_agarwal.jpg
+56,Dr. Akshay Mehta,akshay.mehta@example.com,+91-9000012400,Gastroenterologist,MBBS DM (Gastroenterology),11 years,156DigestiveHealth Center Kolkata,https://example.com/images/akshay_mehta.jpg
+57,Dr. Shweta Patel,shweta.patel@example.com,+91-9000012401,Cardiologist,MBBS MD (Cardiology),10 years,157 Heart Cinic Pune,https://example.om/images/shweta_patel.jpg
+58,Dr. Amit Kumar,amit.kumar@example.com,+91-9000012402,Nephrologist,MBBS DM (Nephrology),9 years,158 Kidney Clinic Ahmedabad,htps://example.com/images/amit_kumar.jpg
+59,Dr. Suman Gupta,suman.gupta@example.com,+91-9000012403,Oncologist,MBBS DM (Oncology),12 years,159 Cancer Center Jaipur,https://example.com/images/suman_gupta.jpg
+60,Dr. Anju Reddy,anju.reddy@example.com,+91-9000012404,Physiatrist,MBBS MD (Physical Medicine),7 years,160 Rehab enter Surat,https://example.com/images/anju_reddy.jpg
+61,Dr. Nikhil Sharma,nikhil.sharma@example.com,+91-9000012405,General Surgeon,MBBS MS (General Surgey),13 years,161 Surical Health Center Delhi,https://example.com/images/nikhil_sharma.jpg
+62,Dr. Meenal Patel,meenal.patel@example.com,+91-9000012406,Ophthalmologist,MBBS MS (Ophthalmology),10 yeas,162 Eye Health Clinic Mumbai,ttps://example.com/images/meenal_patel.jpg
+63,Dr. Vikram Sharma,vikram.sharma@example.com,+91-9000012407,Orthodontist,MBBS MDS (Orthodontics),9 years,163 Smile Health Cinic Bangalore,https://example.com/images/vikram_sharma.jpg
+64,Dr. Reema Singh,reema.singh@example.com,+91-9000012408,Periodontist,MBBS MDS (Periodontics),8 years,164 Dental Clinic Hyderabad,https://example.com/images/reema_singh.jpg
+65,Dr. Harpreet Kaur,harpreet.kaur@example.com,+91-9000012409,Plastic Surgeon,MBBS MS (Plastic Surgery),11 years,165 Cosmetic Health Center Chennai,https://example.com/images/harpreet_kaur.jpg
+66,Dr. Deepika Sharma,deepika.sharma@example.com,+91-9000012410,Rheumatologist,MBBS DM (Rheumatology),7 years,166 Joint Health Clinic Kolkta,https://example.com/images/deepika_sharma.jpg
+67,Dr. Sameer Patel,sameer.patel@example.com,+91-9000012411,Cardiothoracic Surgeon,MBBS MS (Cardiothoracic Surgery),12 years,67 Heart and Lung Clinic Pune,https://example.com/images/sameer_patel.jpg
+68,Dr. Ankit Verma,ankit.verma@example.com,+91-9000012412,Neurosurgeon,MBBS MCh (Neurosurgery),9 years,168 Brain Clinic Ahmedabad,https://example.com/images/ankit_verma.jpg
+69,Dr. Priyanka Agarwal,priyanka.agarwal@example.com,+91-9000012413,Endocrinologist,MBBS DM (Endocrinology),10 years,169 Endocrine Center Jaipur,https://example.com/images/priyanka_agarwal.jpg
+70,Dr. Sumit Joshi,sumit.joshi@example.com,+91-9000012414,Infectious Disease Specialist,MBBS MD (Infectious Diseases),8 years,170 Infectius Disease Center Surat,https://example.com/images/sumit_joshi.jpg
+71,Dr. Sakshi Mehta,sakshi.mehta@example.com,+91-9000012415,Oncologist,MBBS DM (Oncology),11 years,171 Cancer Health Clinic Delhi,https://example.com/imags/sakshi_mehta.jpg
+72,Dr. Vinay Patel,vinay.patel@example.com,+91-9000012416,Dermatologist,MBBS MD (Dermatology),9 years,172 Skin Health Center Mumbai,https://eample.com/images/vinay_patel.jpg
+73,Dr. Tanvi Sharma,tanvi.sharma@example.com,+91-9000012417,Orthopedic Surgeon,MBBS MS (Orthopedics),8 years,173 Bone Clinic Bangalore,https://example.com/images/tanvi_sharma.jpg
+74,Dr. Rajat Kumar,rajat.kumar@example.com,+91-9000012418,General Physician,MBBS MD (Internal Medicine),12 yeas,174 Health Clinic Hyderabad,https://example.com/images/rajat_kumar.jpg
+75,Dr. Aishwarya Patel,aishwarya.patel@example.com,+91-9000012419,Neuro Surgeon,MBBS MS (Neuro Surgery),10 years,175 Brain Health Clinic Chennai,https://example.com/images/aishwarya_patel.jpg
+76,Dr. Sandeep Gupta,sandeep.gupta@example.com,+91-9000012420,Endodontist,MBBS MDS (Endodontics),7 years,176 Dental Health Center Kolkata,https://example.com/images/sandeep_gupta.jpg
+77,Dr. Neha Sharma,neha.sharma@example.com,+91-9000012421,Orthodontist,MBBS MDS (Orthodontics),8 years,177 Smile Clinic Pune,htts://example.com/images/neha_sharma.jpg
+78,Dr. Jitendra Patel,jitendra.patel@example.com,+91-9000012422,Prosthodontist,MBBS MDS (Prosthodontics),6 years,17 Dental Care Clinic Ahmedabad,https://example.com/images/jitendra_patel.jpg
+79,Dr. Priyanka Kumar,priyanka.kumar@example.com,+91-9000012423,Periodontist,MBBS MDS (Periodontics),9 years,179 Gums and Teeth Clinic Jaipur,https://example.com/images/priyanka_kumar.jpg
+80,Dr. Nitin Singh,nitin.singh@example.com,+91-9000012424,Plastic Surgeon,MBBS MS (Plastic Surgery),11 years,180 Cosmetic Center Surat,https://example.com/images/nitin_singh.jpg
+81,Dr. Aman Sharma,aman.sharma@example.com,+91-9000012425,Rheumatologist,MBBS DM (Rheumatology),10 years,181 Joint Health CenterDelhi,https://example.com/images/aman_sharma.jpg
+82,Dr. Aarti Patel,aarti.patel@example.com,+91-9000012426,Cardiothoracic Surgeon,MBBS MS (Cardiothoracic Surgery),3 years,182 Hart and Lung Health Center Mumbai,https://example.com/images/aarti_patel.jpg
+83,Dr. Ankur Gupta,ankur.gupta@example.com,+91-9000012427,Neurosurgeon,MBBS MCh (Neurosurgery),11 years,183 Brain linic Bangalore,https://example.com/imaes/ankur_gupta.jpg
+84,Dr. Divya Sharma,divya.sharma@example.com,+91-9000012428,Endocrinologist,MBBS DM (Endocrinology),8 years,184 Endocrine Center Hyderabad,htps://example.com/images/divya_sharma.jpg
+85,Dr. Rakesh Patel,rakesh.patel@example.com,+91-9000012429,Infectious Disease Specialist,MBBS MD (Infectious Diseases),12 years185 Infectious Disease Clinic, Chennai,https://example.com/images/rakesh_patel.jpg
+86,Dr. Minal Gupta,minal.gupta@example.com,+91-9000012430,Oncologist,MBBS DM (Oncology),10 years,186 Cancer HealthCenter Kolkata,https://example.com/images/minal_gupta.jpg
+87,Dr. Vikash Kumar,vikash.kumar@example.com,+91-9000012431,Dermatologist,MBBS MD (Dermatology),9 years,187 Skin Health Cinic Pune,https://example.com/images/vikash_kumar.jpg
+88,Dr. Priya Singh,priys.singh@example.com,+91-9000012432,Orthopedic Surgeon,MBBS MS (Orthopedics),8 years,88 Bone Clinic Ahmedabad,https://example.com/images/priya_singh.jpg
+89,Dr. Rajeev Reddy,rajeeve.reddy@example.com,+91-9000012433,General Physician,MBBS MD (Internal Medicine),11 years,189 Health Clinic Jaipur,https://example.com/images/rajeeve_reddy.jpg
+90,Dr. Sunil Patel,sunil.patel@example.com,+91-9000012434,Neuro Surgeon,MBBS MS (Neuro Surgery),10 years,190 Brain Health Clinic Surat,https://example.com/images/sunil_patel.jpg
+91,Dr. Anita Sharma,anita.sharma@example.com,+91-9000012435,Endodontist,MBBS MDS (Endodontics),7 years,191 Dental Center Delhi,https://example.com/images/anita_sharma.jpg
+92,Dr. Rajat Singh,rajat.singh@example.com,+91-9000012436,Orthodontist,MBBS MDS (Orthodontics),9 years,192 Smile Clinic Mumbai,https://example.com/images/rajat_singh.jpg
+93,Dr. Preeti Gupta,preeti.gupta@example.com,+91-9000012437,Prosthodontist,MBBS MDS (Prosthodontics),6 yeas,193 Dental Health Clinic Bangalore,https://example.com/images/preeti_gupta.jpg
+94,Dr. Karan Sharma,karan.sharma@example.com,+91-9000012438,Periodontist,MBBS MDS (Periodontics),8 years,194 Gums Clinic Hyderabad,https://example.com/images/karan_sharma.jpg
+95,Dr. Meena Patel,meena.patel@example.com,+91-9000012439,Plastic Surgeon,MBBS MS (Plastic Surgery),11 years,195 Cosmetic Health Center Chennai,https://example.com/images/meena_patel.jpg
+96,Dr. Ankit Agarwal,ankit.agarwal@example.com,+91-9000012440,Rheumatologist,MBBS DM (Rheumatology),9 years,196 Joint Health Center Kolata,https://example.com/images/ankit_agarwal.jpg
+97,Dr. Nisha Patel,nisha.patel@example.com,+91-9000012441,Cardiothoracic Surgeon,MBBS MS (Cardiothoracic Surgery),13 year,197 Hear and Lung Clinic Pune,https://example.com/images/nisha_patel.jpg
+98,Dr. Vivek Kumar,vivek.kumar@example.com,+91-9000012442,Neurosurgeon,MBBS MCh (Neurosurgery),10 years,198 Brain Cliic Ahmedabad,https://example.com/images/vivek_kumar.jpg
+99,Dr. Divya Reddy,divya.reddy@example.com,+91-9000012443,Endocrinologist,MBBS DM (Endocrinology),8 years,199 Endocrine Health Clinic Jaipur,https://example.com/images/divya_reddy.jpg
+100,Dr. Ashok Gupta,ashok.gupta@example.com,+91-9000012444,Infectious Disease Specialist,MBBS MD (Infectious Diseases),12 years,200 Infectious Disease Clinic Surat,https://example.com/images/ashok_gupta.jpg
