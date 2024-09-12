@@ -1902,102 +1902,102 @@ def healthcheck():
                            user_height=user_height, user_weight=user_weight, user_image=user_image,is_admin=is_admin)
     
 
-#================================================ madicin part =========================================================
-#================================================ madicin part =========================================================
+# #================================================ madicin part =========================================================
+# #================================================ madicin part =========================================================
 
-# Load your data
+# # Load your data
 # df = pd.read_csv('Dataset/drugsComTest_raw.csv')
 
-# Prepare data for recommendation
-df = df[['drugName', 'condition']]
-df.dropna(subset=['condition'], inplace=True)
-tfidf_vectorizer = TfidfVectorizer()
-tfidf_matrix = tfidf_vectorizer.fit_transform(df['condition'])
+# # Prepare data for recommendation
+# df = df[['drugName', 'condition']]
+# df.dropna(subset=['condition'], inplace=True)
+# tfidf_vectorizer = TfidfVectorizer()
+# tfidf_matrix = tfidf_vectorizer.fit_transform(df['condition'])
 
-# Get known conditions
-known_conditions = df['condition'].unique()
+# # Get known conditions
+# known_conditions = df['condition'].unique()
 
-# Custom filter to zip two lists
-@app.template_filter('zip_lists')
-def zip_lists(a, b):
-    return zip(a, b)
-
-
-@app.route('/medicine')
-def medicine():
-    if not session.get('user_id'):
-        flash('Please login first', 'danger')
-        return redirect(url_for('login'))
-
-    # Fetch user details from the session
-    user_name = session.get('user_name')
-    user_email = session.get('user_email')
-    user_image = session.get('user_image')
-
-    # You can pass these details to the template if needed
-    return render_template('/Service/Medicine.html', known_conditions=known_conditions, 
-                           user_name=user_name, user_email=user_email, 
-                           user_image=user_image)
+# # Custom filter to zip two lists
+# @app.template_filter('zip_lists')
+# def zip_lists(a, b):
+#     return zip(a, b)
 
 
+# @app.route('/medicine')
+# def medicine():
+#     if not session.get('user_id'):
+#         flash('Please login first', 'danger')
+#         return redirect(url_for('login'))
 
-@app.route('/recommend', methods=['POST'])
-def recommend():
-    if not session.get('user_id'):
-        flash('Please login first', 'danger')
-        return redirect(url_for('login'))
+#     # Fetch user details from the session
+#     user_name = session.get('user_name')
+#     user_email = session.get('user_email')
+#     user_image = session.get('user_image')
+
+#     # You can pass these details to the template if needed
+#     return render_template('/Service/Medicine.html', known_conditions=known_conditions, 
+#                            user_name=user_name, user_email=user_email, 
+#                            user_image=user_image)
+
+
+
+# @app.route('/recommend', methods=['POST'])
+# def recommend():
+#     if not session.get('user_id'):
+#         flash('Please login first', 'danger')
+#         return redirect(url_for('login'))
     
-    # Fetch user details from the session
-    user_name = session.get('user_name')
-    user_email = session.get('user_email')
-    user_image = session.get('user_image')
+#     # Fetch user details from the session
+#     user_name = session.get('user_name')
+#     user_email = session.get('user_email')
+#     user_image = session.get('user_image')
 
-    user_condition = request.form.get('condition').strip()
+#     user_condition = request.form.get('condition').strip()
 
-    # Initialize similarity_scores
-    similarity_scores = None
+#     # Initialize similarity_scores
+#     similarity_scores = None
 
-    # Check if the user's condition is known
-    if user_condition.lower() in map(str.lower, known_conditions):
-        # If known, get recommendations directly
-        top_medicines = df[df['condition'].str.lower() == user_condition.lower()]['drugName'].unique()
-        if top_medicines.size == 0:
-            return render_template('Service/medicineresult.html', error="No relevant medicines found for the given condition.", 
-                                   condition=user_condition,
-                                   user_name=user_name, user_email=user_email, 
-                           user_image=user_image,)
+#     # Check if the user's condition is known
+#     if user_condition.lower() in map(str.lower, known_conditions):
+#         # If known, get recommendations directly
+#         top_medicines = df[df['condition'].str.lower() == user_condition.lower()]['drugName'].unique()
+#         if top_medicines.size == 0:
+#             return render_template('Service/medicineresult.html', error="No relevant medicines found for the given condition.", 
+#                                    condition=user_condition,
+#                                    user_name=user_name, user_email=user_email, 
+#                            user_image=user_image,)
         
-        # Create Google search links
-        medicine_links = [
-            f"https://www.google.com/search?q={medicine.replace(' ', '+')}+site:drugs.com"
-            for medicine in top_medicines
-        ]
-    else:
-        # If not known, use similarity scoring
-        user_condition_tfidf = tfidf_vectorizer.transform([user_condition])
-        similarity_scores = cosine_similarity(user_condition_tfidf, tfidf_matrix)
+#         # Create Google search links
+#         medicine_links = [
+#             f"https://www.google.com/search?q={medicine.replace(' ', '+')}+site:drugs.com"
+#             for medicine in top_medicines
+#         ]
+#     else:
+#         # If not known, use similarity scoring
+#         user_condition_tfidf = tfidf_vectorizer.transform([user_condition])
+#         similarity_scores = cosine_similarity(user_condition_tfidf, tfidf_matrix)
 
-        # Check if the highest similarity score is above a threshold
-        threshold = 0.1
-        if similarity_scores.max() < threshold:
-            return render_template('/Service/medicineresult.html', error="No relevant medicines found for the given condition.", 
-                                   condition=user_condition,user_name=user_name,
-                                     user_email=user_email, 
-                           user_image=user_image,)
+#         # Check if the highest similarity score is above a threshold
+#         threshold = 0.1
+#         if similarity_scores.max() < threshold:
+#             return render_template('/Service/medicineresult.html', error="No relevant medicines found for the given condition.", 
+#                                    condition=user_condition,user_name=user_name,
+#                                      user_email=user_email, 
+#                            user_image=user_image,)
 
-        # Get top recommendations
-        top_indices = similarity_scores.argsort()[0][::-1][:10]
-        top_medicines = df['drugName'].iloc[top_indices]
+#         # Get top recommendations
+#         top_indices = similarity_scores.argsort()[0][::-1][:10]
+#         top_medicines = df['drugName'].iloc[top_indices]
 
-        # Create Google search links
-        medicine_links = [
-            f"https://www.google.com/search?q={medicine.replace(' ', '+')}+site:drugs.com"
-            for medicine in top_medicines
-        ]
+#         # Create Google search links
+#         medicine_links = [
+#             f"https://www.google.com/search?q={medicine.replace(' ', '+')}+site:drugs.com"
+#             for medicine in top_medicines
+#         ]
 
-    return render_template('Service/medicineresult.html', medicines=top_medicines, links=medicine_links, condition=user_condition,
-                           user_name=user_name, user_email=user_email, 
-                           user_image=user_image,)
+#     return render_template('Service/medicineresult.html', medicines=top_medicines, links=medicine_links, condition=user_condition,
+#                            user_name=user_name, user_email=user_email, 
+#                            user_image=user_image,)
 
 
 #================================================ madicin part  End =========================================================
