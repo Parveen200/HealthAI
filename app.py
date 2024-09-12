@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for, flash, jsonify, session
 from pymongo import MongoClient
-from emotion import analyze_sentiment_vader, analyze_sentiment_bert, recommend_coping_mechanisms
+# from emotion import analyze_sentiment_vader, analyze_sentiment_bert, recommend_coping_mechanisms
 import numpy as np
 import pickle
 import pandas as pd
@@ -2008,45 +2008,45 @@ def recommend():
 #================================================ Emotion part start  =========================================================
 
 
-@app.route('/emotions')
-def emotions():
-    if not session.get('user_id'):
-        flash('Please login first', 'danger')
-        return redirect(url_for('login'))
+# @app.route('/emotions')
+# def emotions():
+#     if not session.get('user_id'):
+#         flash('Please login first', 'danger')
+#         return redirect(url_for('login'))
 
-    # Fetch user details from the session
-    user_name = session.get('user_name')
-    user_email = session.get('user_email')
-    user_image = session.get('user_image')
+#     # Fetch user details from the session
+#     user_name = session.get('user_name')
+#     user_email = session.get('user_email')
+#     user_image = session.get('user_image')
 
-    return render_template('Service/emotions.html',
-    user_name=user_name, 
-                           user_email=user_email, 
-                           user_image=user_image)
-
-
-@app.route('/analyze', methods=['POST'])
-def analyze():
-    if not session.get('user_id'):
-        flash('Please login first', 'danger')
-        return redirect(url_for('login'))
-
-    # Fetch user details from the session
-    user_name = session.get('user_name')
-    user_email = session.get('user_email')
-    user_image = session.get('user_image')
+#     return render_template('Service/emotions.html',
+#     user_name=user_name, 
+#                            user_email=user_email, 
+#                            user_image=user_image)
 
 
-    text = request.form['mood']
-    sentiment_score_vader = analyze_sentiment_vader(text)
-    sentiment_score_bert = analyze_sentiment_bert(text)
-    recommendations = recommend_coping_mechanisms(sentiment_score_vader)
-    return render_template('Service/emotionsresult.html', 
-                           score_vader=sentiment_score_vader, 
-                           score_bert=sentiment_score_bert.numpy(), 
-                           recommendations=recommendations,
-                           user_name=user_name, user_email=user_email, 
-                           user_image=user_image)
+# @app.route('/analyze', methods=['POST'])
+# def analyze():
+#     if not session.get('user_id'):
+#         flash('Please login first', 'danger')
+#         return redirect(url_for('login'))
+
+#     # Fetch user details from the session
+#     user_name = session.get('user_name')
+#     user_email = session.get('user_email')
+#     user_image = session.get('user_image')
+
+
+#     text = request.form['mood']
+#     sentiment_score_vader = analyze_sentiment_vader(text)
+#     sentiment_score_bert = analyze_sentiment_bert(text)
+#     recommendations = recommend_coping_mechanisms(sentiment_score_vader)
+#     return render_template('Service/emotionsresult.html', 
+#                            score_vader=sentiment_score_vader, 
+#                            score_bert=sentiment_score_bert.numpy(), 
+#                            recommendations=recommendations,
+#                            user_name=user_name, user_email=user_email, 
+#                            user_image=user_image)
 #================================================ Emotion part text start =========================================================
 #================================================ Emotion part text start =========================================================
 
@@ -2530,117 +2530,117 @@ def liverresult():
 #================================================Liver Disease Prediction  End ===========================================================
 
 #================================================Ayurvedic Medicines Prediction Start ===========================================================
-#================================================Ayurvedic Medicines Prediction Start ===========================================================
-@app.route('/ayurved')
-def ayurved():
-    if not session.get('user_id'):
-        flash('Please login first', 'danger')
-        return redirect(url_for('login'))
+# #================================================Ayurvedic Medicines Prediction Start ===========================================================
+# @app.route('/ayurved')
+# def ayurved():
+#     if not session.get('user_id'):
+#         flash('Please login first', 'danger')
+#         return redirect(url_for('login'))
 
-    user_name = session.get('user_name')
-    user_email = session.get('user_email')
-    user_image = session.get('user_image')
-    is_admin = session.get('is_admin', False)
+#     user_name = session.get('user_name')
+#     user_email = session.get('user_email')
+#     user_image = session.get('user_image')
+#     is_admin = session.get('is_admin', False)
 
-    # Fetch ayurvedic medicines from MongoDB
-    medicines_collection = db.ayurvedic_medicines
-    medicines = list(medicines_collection.find())
+#     # Fetch ayurvedic medicines from MongoDB
+#     medicines_collection = db.ayurvedic_medicines
+#     medicines = list(medicines_collection.find())
 
-    return render_template('/Service/ayurved.html', medicines=medicines, user_name=user_name,
-                           user_email=user_email,
-                           user_image=user_image,
-                           is_admin=is_admin)
-
-
+#     return render_template('/Service/ayurved.html', medicines=medicines, user_name=user_name,
+#                            user_email=user_email,
+#                            user_image=user_image,
+#                            is_admin=is_admin)
 
 
-@app.route('/ayurvedicmedicines')
-def ayurvedicmedicines():
-    if not session.get('user_id'):
-        flash('Please login first', 'danger')
-        return redirect(url_for('login'))
+
+
+# @app.route('/ayurvedicmedicines')
+# def ayurvedicmedicines():
+#     if not session.get('user_id'):
+#         flash('Please login first', 'danger')
+#         return redirect(url_for('login'))
     
-    user_name = session.get('user_name')
-    user_email = session.get('user_email')
-    user_image = session.get('user_image')
-    is_admin = session.get('is_admin', False)
+#     user_name = session.get('user_name')
+#     user_email = session.get('user_email')
+#     user_image = session.get('user_image')
+#     is_admin = session.get('is_admin', False)
 
-    # Load the dataset to get the unique diseases
-    data = pd.read_csv('Dataset/ayurdataset.csv')
-    diseases = data['disease'].unique().tolist()
-    return render_template('/Service/ayurvedicmedicines.html', diseases=diseases,
-                               user_name=user_name,
-                               user_email=user_email,
-                               user_image=user_image,
-                               is_admin=is_admin)
+#     # Load the dataset to get the unique diseases
+#     data = pd.read_csv('Dataset/ayurdataset.csv')
+#     diseases = data['disease'].unique().tolist()
+#     return render_template('/Service/ayurvedicmedicines.html', diseases=diseases,
+#                                user_name=user_name,
+#                                user_email=user_email,
+#                                user_image=user_image,
+#                                is_admin=is_admin)
     
-import requests
-from bs4 import BeautifulSoup
-# Load the saved model and label encoders
-model = joblib.load('Model/predictor.pkl')
-label_encoders = joblib.load('Model/encoders.pkl')
+# import requests
+# from bs4 import BeautifulSoup
+# # Load the saved model and label encoders
+# model = joblib.load('Model/predictor.pkl')
+# label_encoders = joblib.load('Model/encoders.pkl')
 
 
-@app.route('/ayurpredict', methods=['POST'])
-def ayurpredict():
-    if not session.get('user_id'):
-        flash('Please login first', 'danger')
-        return redirect(url_for('login'))
+# @app.route('/ayurpredict', methods=['POST'])
+# def ayurpredict():
+#     if not session.get('user_id'):
+#         flash('Please login first', 'danger')
+#         return redirect(url_for('login'))
     
-    user_name = session.get('user_name')
-    user_email = session.get('user_email')
-    user_image = session.get('user_image')
-    is_admin = session.get('is_admin', False)
+#     user_name = session.get('user_name')
+#     user_email = session.get('user_email')
+#     user_image = session.get('user_image')
+#     is_admin = session.get('is_admin', False)
 
-    try:
-        # Extract the input features from the request
-        disease = request.form['disease']
-        severity = request.form['severity']
-        age = int(request.form['age'])
-        gender = request.form['gender']
+#     try:
+#         # Extract the input features from the request
+#         disease = request.form['disease']
+#         severity = request.form['severity']
+#         age = int(request.form['age'])
+#         gender = request.form['gender']
         
-        # Validate input
-        if disease not in label_encoders['disease'].classes_:
-            return render_template('/Service/ayurvedicmedicines.html', prediction_text='Error: Invalid disease value.')
-        if severity not in label_encoders['severity'].classes_:
-            return render_template('/Service/ayurvedicmedicines.html', prediction_text='Error: Invalid severity value.')
-        if gender not in label_encoders['gender'].classes_:
-            return render_template('/Service/ayurvedicmedicines.html', prediction_text='Error: Invalid gender value.')
+#         # Validate input
+#         if disease not in label_encoders['disease'].classes_:
+#             return render_template('/Service/ayurvedicmedicines.html', prediction_text='Error: Invalid disease value.')
+#         if severity not in label_encoders['severity'].classes_:
+#             return render_template('/Service/ayurvedicmedicines.html', prediction_text='Error: Invalid severity value.')
+#         if gender not in label_encoders['gender'].classes_:
+#             return render_template('/Service/ayurvedicmedicines.html', prediction_text='Error: Invalid gender value.')
 
-        # Encode the input features
-        disease_encoded = label_encoders['disease'].transform([disease])[0]
-        severity_encoded = label_encoders['severity'].transform([severity])[0]
-        gender_encoded = label_encoders['gender'].transform([gender])[0]
+#         # Encode the input features
+#         disease_encoded = label_encoders['disease'].transform([disease])[0]
+#         severity_encoded = label_encoders['severity'].transform([severity])[0]
+#         gender_encoded = label_encoders['gender'].transform([gender])[0]
         
-        # Prepare the input array for the model
-        input_features = [[disease_encoded, severity_encoded, age, gender_encoded]]
+#         # Prepare the input array for the model
+#         input_features = [[disease_encoded, severity_encoded, age, gender_encoded]]
         
-        # Predict the drug
-        predicted_drug = model.predict(input_features)[0]
+#         # Predict the drug
+#         predicted_drug = model.predict(input_features)[0]
         
-        # Generate a Google search link for more information
-        more_info_link = f"https://www.google.com/search?q={predicted_drug.replace(' ', '+')}+ayurvedic+medicine"
+#         # Generate a Google search link for more information
+#         more_info_link = f"https://www.google.com/search?q={predicted_drug.replace(' ', '+')}+ayurvedic+medicine"
         
-        # Fetch images from Google
-        image_search_url = f"https://www.google.com/search?q={predicted_drug.replace(' ', '+')}+ayurvedic+medicine&tbm=isch"
-        response = requests.get(image_search_url)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        image_tags = soup.find_all('img')
-        images = [img['src'] for img in image_tags if img['src'].startswith('http')][:5]  # Fetch top 5 images
+#         # Fetch images from Google
+#         image_search_url = f"https://www.google.com/search?q={predicted_drug.replace(' ', '+')}+ayurvedic+medicine&tbm=isch"
+#         response = requests.get(image_search_url)
+#         soup = BeautifulSoup(response.text, 'html.parser')
+#         image_tags = soup.find_all('img')
+#         images = [img['src'] for img in image_tags if img['src'].startswith('http')][:5]  # Fetch top 5 images
 
-        return render_template('/Service/ayurvedicmedicinesresult.html', 
-                               predicted_drug=predicted_drug, 
-                               more_info_link=more_info_link, 
-                               images=images, 
-                               disease=disease, 
-                               severity=severity, 
-                               age=age, 
-                               gender=gender,user_name=user_name,
-                               user_email=user_email,
-                               user_image=user_image,
-                               is_admin=is_admin)
-    except Exception as e:
-        return render_template('/Service/ayurvedicmedicines.html', prediction_text=f'Error: {str(e)}')
+#         return render_template('/Service/ayurvedicmedicinesresult.html', 
+#                                predicted_drug=predicted_drug, 
+#                                more_info_link=more_info_link, 
+#                                images=images, 
+#                                disease=disease, 
+#                                severity=severity, 
+#                                age=age, 
+#                                gender=gender,user_name=user_name,
+#                                user_email=user_email,
+#                                user_image=user_image,
+#                                is_admin=is_admin)
+#     except Exception as e:
+#         return render_template('/Service/ayurvedicmedicines.html', prediction_text=f'Error: {str(e)}')
 
 #================================================Ayurvedic Medicines Prediction End ===========================================================
 #================================================Ayurvedic Medicines Prediction  End ===========================================================
