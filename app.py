@@ -1906,7 +1906,7 @@ def healthcheck():
 #================================================ madicin part =========================================================
 
 # Load your data
-df = pd.read_csv('Dataset/drugsComTest_raw.csv')
+# df = pd.read_csv('Dataset/drugsComTest_raw.csv')
 
 # Prepare data for recommendation
 df = df[['drugName', 'condition']]
