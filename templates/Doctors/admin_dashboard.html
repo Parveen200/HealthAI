@@ -99,8 +99,8 @@
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="{{ url_for('doctorprofile')}}"><i
 										class="align-middle me-1" data-feather="settings"></i> Update profile</a>
-								<a class="dropdown-item" href="/update_password"><i class="align-middle me-1"
-										data-feather="help-circle"></i>Update_Password</a>
+										<a class="dropdown-item" href="/update_password"><i class="align-middle me-1"
+											data-feather="help-circle"></i>Update_Password</a>
 								<div class="dropdown-divider"></div>
 								<a class="dropdown-item" href="{{ url_for('logout') }}">Log out</a>
 								{% else %}
@@ -125,9 +125,9 @@
 
 			<main class="content">
 				<div class="container-fluid p-0">
-
+			
 					<h1 class="h3 mb-3"><strong>Doctors</strong> Dashboard</h1>
-
+			
 					<div class="row">
 						<div class="col-xl-6 col-xxl-5 d-flex">
 							<div class="w-100">
@@ -215,7 +215,7 @@
 								</div>
 							</div>
 						</div>
-
+			
 						<div class="col-xl-6 col-xxl-7">
 							<div class="card flex-fill w-100">
 								<div class="card-header">
@@ -228,11 +228,11 @@
 								</div>
 							</div>
 						</div>
-
+			
 					</div>
-
+			
 					<div class="row">
-
+			
 						<div class="col-12 col-md-6 col-xxl-3 d-flex order-2 order-xxl-3">
 							<div class="card flex-fill w-100">
 								<div class="card-header">
@@ -247,7 +247,7 @@
 													height="280"></canvas>
 											</div>
 										</div>
-
+			
 										<table class="table mb-0">
 											<tbody>
 												<tr>
@@ -272,7 +272,7 @@
 								</div>
 							</div>
 						</div>
-
+			
 						<div class="col-12 col-md-12 col-xxl-6 d-flex order-3 order-xxl-2">
 							<div class="card flex-fill w-100">
 								<div class="card-header">
@@ -298,93 +298,104 @@
 							</div>
 						</div>
 					</div>
-
+			
 					<div class="row">
-						<!-- Patients Table -->
 						<div class="col-12 col-lg-8 col-xxl-9 d-flex">
 							<div class="card flex-fill">
 								<div class="card-header">
-									<h5 class="card-title mb-0">Patients: <strong class="text-primary">{{ patients|length }}</strong></h5>
+									<h5 class="card-title mb-0">Patients</h5>
 								</div>
-								<div class="table-responsive">
-									<table class="table table-hover my-0 table-striped">
-										<thead class="thead-light">
-											<tr>
-												<th>ID</th>
-												<th>Image</th>
-												<th>Name</th>
-												<th>Email</th>
-												<th>Height</th>
-												<th>Weight</th>
-												<th>Age</th>
-												<th>Gender</th>
-												<th>Actions</th>
-												<th>Appointments</th>
-											</tr>
-										</thead>
-										<tbody>
-											{% for patient in patients %}
-											<tr>
-												<td>{{ loop.index }}</td>
-											
-												<td>
-													<img src="{{ url_for('static', filename='profile_images/' + (patient.image or 'default_image.jpg')) }}"
-														alt="Image" class="img-thumbnail" style="width: 50px; height: 50px; border-radius: 50%;">
-												</td>
-												<td>{{ patient.name }}</td>
-												<td>{{ patient.email }}</td>
-												<td>{{ patient.height }} cm</td>
-												<td>{{ patient.weight }} kg</td>
-												<td>{{ patient.age }} years</td>
-												<td>{{ patient.gender }}</td>
-												<td>
-													<a href="{{ url_for('view_patient', patient_id=patient._id) }}" class="btn btn-info btn-sm" title="View">
-														<i class="fas fa-eye"></i>
-													</a>
-													<a href="{{ url_for('update_patient', patient_id=patient._id) }}" class="btn btn-warning btn-sm" title="Update">
-														<i class="fas fa-edit"></i>
-													</a>
-													<form action="{{ url_for('delete_patient', patient_id=patient._id) }}" method="post" style="display:inline;">
-														<button type="submit" class="btn btn-danger btn-sm" title="Delete">
-															<i class="fas fa-trash-alt"></i>
-														</button>
-													</form>
-												</td>
-												<td>
-													<a href="{{ url_for('admin_patient_appointments', patient_id=patient._id) }}" class="btn btn-primary btn-sm" title="View Appointments">
-														<i class="fas fa-calendar-alt"></i>
-													</a>
-												</td>
-											</tr>
-											{% endfor %}
-										</tbody>
-									</table>
-								</div>
+			
+								<table class="table table-hover my-0">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Name</th>
+											<th>Image</th>
+											<th>Email</th>
+											<th>Height</th>
+											<th>Weight</th>
+											<th>Age</th>
+											<th>Gender</th>
+											<th>Actions</th>
+											<th>Appointments</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for patient in patients %}
+										<tr>
+											<td>{{ patient.id }}</td>
+											<td>{{ patient.name }}</td>
+											<td>
+												<img src="{{ url_for('static', filename='profile_images/' + (patient.image or 'default_image.jpg')) }}"
+													alt="Image" class="img-thumbnail"
+													style="width: 50px; height: 50px; border-radius: 50%;">
+											</td>
+											<td>{{ patient.email }}</td>
+											<td>{{ patient.height }}</td>
+											<td>{{ patient.weight }}</td>
+											<td>{{ patient.age }}</td>
+											<td>{{ patient.gender }}</td>
+											<td>
+												<a href="{{ url_for('view_patient', patient_id=patient.id) }}"
+													class="btn btn-info btn-sm btn-custom" title="View">
+													<i class="fas fa-eye"></i>
+												</a>
+												<a href="{{ url_for('update_patient', patient_id=patient.id) }}"
+													class="btn btn-warning btn-sm btn-custom" title="Update">
+													<i class="fas fa-edit"></i>
+												</a>
+												<form action="{{ url_for('delete_patient', patient_id=patient.id) }}"
+													method="post" style="display:inline;">
+													<button type="submit" class="btn btn-danger btn-sm btn-custom"
+														title="Delete">
+														<i class="fas fa-trash-alt"></i>
+													</button>
+												</form>
+											</td>
+											<td>
+												<a href="{{ url_for('admin_patient_appointments', patient_id=patient.id) }}"
+													class="btn btn-primary btn-sm btn-custom" title="View Appointments">
+													<i class="fas fa-calendar-alt"></i>
+												</a>
+											</td>
+										</tr>
+										{% endfor %}
+									</tbody>
+									<tfoot>
+										<tr>
+											<td colspan="10" class="text-right">
+												<strong>Total Patients: {{ patients|length }}</strong>
+											</td>
+										</tr>
+									</tfoot>
+								</table>
+			
 							</div>
 						</div>
-					
-						<!-- Monthly New Patients Graph -->
+			
 						<div class="col-12 col-lg-4 col-xxl-3 d-flex">
 							<div class="card flex-fill w-100">
 								<div class="card-header">
 									<h5 class="card-title mb-0">Monthly New Patients</h5>
 								</div>
-								<div class="card-body">
-									<canvas id="chartjs-dashboard-bar" height="400px"></canvas>
+								<div class="card-body d-flex w-100">
+									<div class="align-self-center chart chart-lg">
+										<canvas id="chartjs-dashboard-bar" height="400px"></canvas>
+									</div>
 								</div>
 							</div>
 						</div>
+			
 					</div>
-					
-
-
+			
 				</div>
-
+			
 			</main>
-
+			
 			<!-- Include Chart.js library -->
 			<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+			
 
 
 		</div>
@@ -451,42 +462,59 @@
 		}
 		});
 	</script>
-
-<!-- Chart.js Script -->
-<script>
-	document.addEventListener("DOMContentLoaded", function () {
-		var ctx = document.getElementById('chartjs-dashboard-bar').getContext('2d');
-		var chart = new Chart(ctx, {
-			type: 'bar',
-			data: {
-				labels: {{ months | safe }},
-				datasets: [{
-					label: 'New Patients',
-					data: {{ patient_counts | safe }},
-					backgroundColor: 'rgba(54, 162, 235, 0.5)',
-					borderColor: 'rgba(54, 162, 235, 1)',
-					borderWidth: 1
-				}]
-			},
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			var ctx = document.getElementById('chartjs-dashboard-bar').getContext('2d');
+			new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: {{ recent_activities.labels | tojson }},
+			datasets: [{
+				label: 'New Patients',
+				data: {{ recent_activities.data | tojson }},
+			backgroundColor: 'rgba(75, 192, 192, 0.2)',
+			borderColor: 'rgba(75, 192, 192, 1)',
+			borderWidth: 1
+}]
+},
 			options: {
-				responsive: true,
-				scales: {
-					y: {
-						beginAtZero: true,
-						ticks: {
-							stepSize: 1
+			responsive: true,
+			plugins: {
+				legend: {
+					position: 'top',
+				},
+				tooltip: {
+					callbacks: {
+						label: function (context) {
+							var label = context.dataset.label || '';
+							if (label) {
+								label += ': ' + context.raw;
+							}
+							return label;
 						}
 					}
+				}
+			},
+			scales: {
+				x: {
+					beginAtZero: true,
+					title: {
+						display: true,
+						text: 'Month'
+					}
 				},
-				plugins: {
-					legend: {
-						display: false
+				y: {
+					beginAtZero: true,
+					title: {
+						display: true,
+						text: 'Number of Patients'
 					}
 				}
 			}
-		});
-	});
-</script>
+		}
+});
+});
+	</script>
 
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
@@ -555,7 +583,6 @@
 			}
 		});
 	</script>
-	
 	<script src="https://cdn.jsdelivr.net/npm/jsvectormap@1.2.2/dist/js/jsvectormap.min.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/jsvectormap@1.2.2/dist/css/jsvectormap.min.css" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
