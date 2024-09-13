@@ -36,62 +36,10 @@
             float: right;
 
         }
-      
-        #videoDiv2 {
-           
-           display: block;
-           position: relative;
-        
-       }
-
-       /* This has been changed */
-       #video2 {
-           width: 100%;
-           height: 100%;
-       }
-          /* This has been changed */
-          #videoMessage2 {
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        
-        }
 
 
-        .container-fluid {
-            position: relative;
-            z-index: 1;
-            /* Ensure the container content is on top of the video */
-            padding: 0;
 
-        }
 
-        .chat-container {
-            max-width: 800px;
-            margin: 50px 0;
-            /* Adjusts margin: 50px top and bottom, 0 left and right */
-            padding: 20px;
-            background-color: transparent;
-            border-radius: 8px;
-            position: relative;
-            left: 0;
-            /* Positions the container on the left side */
-        }
-
-        /* For responsiveness */
-        @media screen and (max-width: 768px) {
-            .chat-container {
-                max-width: 100%;
-                /* Ensures container takes full width on smaller screens */
-                margin: 20px;
-                /* Adjusts margin for smaller screens */
-                padding: 15px;
-            }
-        }
 
         .chat-box {
             border: 2px solid #ddd;
@@ -139,7 +87,7 @@
 
         .bot-message .message-content {
             background-color: #7aeafb;
-            color:black;
+            color: black;
             font-size: 15px;
             margin-right: 10px;
         }
@@ -197,6 +145,59 @@
             margin: 5px;
             padding: 10px 20px;
         }
+
+
+        #videowrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        #fullScreenDiv {
+            min-height: 100%;
+            height: 100vh;
+            width: 100vw;
+            padding: 0;
+            margin: 0;
+            background-color: gray;
+            position: relative;
+        }
+
+        #video {
+            width: 100vw;
+            height: auto;
+            margin: auto;
+            display: block;
+        }
+
+        @media (min-aspect-ratio: 16/9) {
+            #video {
+                width: 100vw;
+                height: auto;
+            }
+        }
+
+        @media (max-aspect-ratio: 16/9) {
+            #video {
+                height: 100vh;
+                width: auto;
+                margin-left: 50vw;
+                transform: translate(-50%);
+            }
+        }
+
+        #videoMessage {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    left: 0;
+    display: flex;
+    justify-content: flex-start; /* Align items to the start */
+    align-items: center;
+    flex-direction: column;
+}
+
     </style>
 </head>
 
@@ -307,120 +308,140 @@
     </div>
     <div id="home"></div>
     <!-- Navbar End -->
-     
-    <div id="videoDiv2" class="container-fluid ">
-        <video id="video2" preload="" autoplay="" muted="" playsinline="" loop="">
-            <source src="https://media.istockphoto.com/id/1590138499/video/ai-chatbot-and-fintech-innovation-technology-concept.mp4?s=mp4-640x640-is&k=20&c=t3kFA1lSJ-jqrMPIdO0NdlOaktX85ndXWgriOXFBwjA=" type="video/webm">
-        </video>
-       <div id="videoMessage2" class="container container-fluid d-flex justify-content-center align-items-center">
-            <div class="chat-container">
-                <h1 class="text-center mb-4 text-primary ">CHAT WITH OUR BOT</h1>
-                <div class="chat-box" id="chat-box">
-                    <div class="chat-history">
-                        {% for role, text in chat_history %}
-                        <div class="chat-message {{ 'user-message' if role == 'You' else 'bot-message' }}">
-                            <div class="message-icon">
-                                <img src="{{ url_for('static', filename='profile_images/'+ user_image if role == 'You' else 'img/OIP.jpg') }}" alt="icon">
+    <div id="videowrapper">
+        <div id="fullScreenDiv">
+            <video id="video" role="presentation" preload="auto" playsinline="" crossorigin="anonymous" loop="" muted=""
+                autoplay="">
+                <source
+                    src="https://media.istockphoto.com/id/1590138499/video/ai-chatbot-and-fintech-innovation-technology-concept.mp4?s=mp4-640x640-is&k=20&c=t3kFA1lSJ-jqrMPIdO0NdlOaktX85ndXWgriOXFBwjA="
+                    type="video/webm">
 
+            </video>
+            <div id="videoMessage" class="styling">
+                <div class="chat-container">
+                    <h1 class="text-center mb-4 text-primary ">CHAT WITH OUR BOT</h1>
+                    <div class="chat-box" id="chat-box">
+                        <div class="chat-history">
+                            {% for role, text in chat_history %}
+                            <div class="chat-message {{ 'user-message' if role == 'You' else 'bot-message' }}">
+                                <div class="message-icon">
+                                    <img src="{{ url_for('static', filename='profile_images/'+ user_image if role == 'You' else 'img/OIP.jpg') }}"
+                                        alt="icon">
+
+                                </div>
+                                <div class="message-content">
+
+                                    <strong>{{ role }}:</strong> {{ text | replace('*', '') | replace('#', '') }}
+                                </div>
                             </div>
-                            <div class="message-content">
-                                
-                                <strong>{{ role }}:</strong> {{ text | replace('*', '') | replace('#', '') }}
-                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                     </div>
-                </div>
-                <form method="POST" action="bot" class="chat-form">
-                    <input type="text" name="input" id="user-input" placeholder="Type your message here..." required>
-                    <button type="submit">Send</button>
-                </form>
-                <div class="text-center quick-replies">
-                    <button class="btn btn-info" onclick="sendQuickReply('Hello')">Hello</button>
-                    <button class="btn btn-info" onclick="sendQuickReply('I want to book an appointment')">Book
-                        Appointment</button>
-                    <button class="btn btn-info" onclick="sendQuickReply('I need a doctor')">Need a Doctor</button>
-                    <button class="btn btn-info" onclick="sendQuickReply('I need a prescription refill')">Prescription
-                        Refill</button>
-                    <button class="btn btn-info" onclick="sendQuickReply('Thank you')">Thank You</button>
+                    <form method="POST" action="bot" class="chat-form">
+                        <input type="text" name="input" id="user-input" placeholder="Type your message here..."
+                            required>
+                        <button type="submit">Send</button>
+                    </form>
+                    <div class="text-center quick-replies">
+                        <button class="btn btn-info" onclick="sendQuickReply('Hello')">Hello</button>
+                        <button class="btn btn-info" onclick="sendQuickReply('I want to book an appointment')">Book
+                            Appointment</button>
+                        <button class="btn btn-info" onclick="sendQuickReply('I need a doctor')">Need a Doctor</button>
+                        <button class="btn btn-info"
+                            onclick="sendQuickReply('I need a prescription refill')">Prescription
+                            Refill</button>
+                        <button class="btn btn-info" onclick="sendQuickReply('Thank you')">Thank You</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </main>
     </div>
+
+
+
     <script>
         function sendQuickReply(reply) {
             document.getElementById('user-input').value = reply;
             document.querySelector('.chat-form').submit();
         }
     </script>
-      
-<!-- Footer Start -->
-<div class="container-fluid bg-dark text-light py-5">
-    <div class="text-lg-end">
-        <a href="#home" class="btn btn-primary btn-page-up">
-            <i class="bi bi-arrow-up"></i>
-        </a>
-    </div>
-    <div class="container py-5">
-        <div class="row g-5">
-            <div class="col-lg-3 col-md-6">
-                <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
-                    Get In Touch</h4>
-                <p class="mb-4">We are committed to providing exceptional service and support. Contact us for any inquiries or support.</p>
-                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary me-3"></i>123 MG Road, Mumbai, India</p>
-                <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>support@example.com</p>
-                <p class="mb-0"><i class="fa fa-phone-alt text-primary me-3"></i>+91 98765 43210</p>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
-                    Quick Links</h4>
-                <div class="d-flex flex-column justify-content-start">
-                    <a class="text-light mb-2" href="/"><i class="fa fa-angle-right me-2"></i>Home</a>
-                    <a class="text-light mb-2" href="#about"><i class="fa fa-angle-right me-2"></i>About Us</a>
-                    <a class="text-light mb-2" href="#service"><i class="fa fa-angle-right me-2"></i>Our Services</a>
-                    <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Meet The Team</a>
-                    <a class="text-light mb-2" href="#blog"><i class="fa fa-angle-right me-2"></i>Latest Blog</a>
-                    <a class="text-light mb-2" href="/appointment"><i class="fa fa-angle-right me-2"></i>Book Appointment</a>
-                    <a class="text-light mb-2" href="/search_doctor"><i class="fa fa-angle-right me-2"></i>Find Doctors</a>
-                    <a class="text-light" href="#contact"><i class="fa fa-angle-right me-2"></i>Contact Us</a>
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-light py-5">
+        <div class="text-lg-end">
+            <a href="#home" class="btn btn-primary btn-page-up">
+                <i class="bi bi-arrow-up"></i>
+            </a>
+        </div>
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
+                        Get In Touch</h4>
+                    <p class="mb-4">We are committed to providing exceptional service and support. Contact us for any
+                        inquiries or support.</p>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary me-3"></i>123 MG Road, Mumbai, India</p>
+                    <p class="mb-2"><i class="fa fa-envelope text-primary me-3"></i>support@example.com</p>
+                    <p class="mb-0"><i class="fa fa-phone-alt text-primary me-3"></i>+91 98765 43210</p>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
-                    Follow Us</h4>
-                <div class="d-flex">
-                    <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i class="fab fa-twitter"></i></a>
-                    <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a class="btn btn-lg btn-primary btn-lg-square rounded-circle" href="#"><i class="fab fa-instagram"></i></a>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
+                        Quick Links</h4>
+                    <div class="d-flex flex-column justify-content-start">
+                        <a class="text-light mb-2" href="/"><i class="fa fa-angle-right me-2"></i>Home</a>
+                        <a class="text-light mb-2" href="#about"><i class="fa fa-angle-right me-2"></i>About Us</a>
+                        <a class="text-light mb-2" href="#service"><i class="fa fa-angle-right me-2"></i>Our
+                            Services</a>
+                        <a class="text-light mb-2" href="#"><i class="fa fa-angle-right me-2"></i>Meet The Team</a>
+                        <a class="text-light mb-2" href="#blog"><i class="fa fa-angle-right me-2"></i>Latest Blog</a>
+                        <a class="text-light mb-2" href="/appointment"><i class="fa fa-angle-right me-2"></i>Book
+                            Appointment</a>
+                        <a class="text-light mb-2" href="/search_doctor"><i class="fa fa-angle-right me-2"></i>Find
+                            Doctors</a>
+                        <a class="text-light" href="#contact"><i class="fa fa-angle-right me-2"></i>Contact Us</a>
+                    </div>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
-                    Our Logo</h4>
-                <img src="/../../static/img/logo.png" alt="Your Logo" class="img-fluid">
-                <h6 class="text-primary text-uppercase mt-4 mb-3">YouTube Channal</h6>
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/your-video-id" allowfullscreen></iframe>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
+                        Follow Us</h4>
+                    <div class="d-flex">
+                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i
+                                class="fab fa-twitter"></i></a>
+                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i
+                                class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle me-2" href="#"><i
+                                class="fab fa-linkedin-in"></i></a>
+                        <a class="btn btn-lg btn-primary btn-lg-square rounded-circle" href="#"><i
+                                class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="d-inline-block text-primary text-uppercase border-bottom border-5 border-secondary mb-4">
+                        Our Logo</h4>
+                    <img src="/../../static/img/logo.png" alt="Your Logo" class="img-fluid">
+                    <h6 class="text-primary text-uppercase mt-4 mb-3">YouTube Channal</h6>
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/your-video-id"
+                            allowfullscreen></iframe>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<div class="container-fluid bg-dark text-light border-top border-secondary py-4">
-    <div class="container">
-        <div class="row g-5">
-            <div class="col-md-6 text-center text-md-start">
-                <p class="mb-md-0">&copy; <a class="text-primary" href="#">Health Engine With Ai Assistancee</a>. All Rights Reserved.</p>
-            </div>
-            <div class="col-md-6 text-center text-md-end">
-                <p class="mb-0">Designed by <a class="text-primary" href="#">AI Care Solutions</a></p>
+    <div class="container-fluid bg-dark text-light border-top border-secondary py-4">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-md-0">&copy; <a class="text-primary" href="#">Health Engine With Ai Assistancee</a>.
+                        All Rights Reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-0">Designed by <a class="text-primary" href="#">AI Care Solutions</a></p>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Footer End -->
+    <!-- Footer End -->
 
 
 
