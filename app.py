@@ -6,6 +6,8 @@ import pickle
 import pandas as pd
 import joblib
 import neattext.functions as nfx 
+
+
 from werkzeug.security import generate_password_hash, check_password_hash
 import logging
 import os
@@ -357,29 +359,45 @@ def admin_dashboard():
     user_email = session.get('user_email')
     user_image = session.get('user_image') or 'default_image.jpg'
 
+    users_collection = db.users
+    health_info_collection = db.user_health_info
+    appointments_collection = db.appointments
+
     try:
-        users_collection = db.users
-        appointments_collection = db.appointments
+        patients = list(users_collection.aggregate([
+            {
+                '$lookup': {
+                    'from': 'user_health_info',
+                    'localField': '_id',
+                    'foreignField': 'user_id',
+                    'as': 'health_info'
+                }
+            },
+            {'$unwind': {'path': '$health_info', 'preserveNullAndEmptyArrays': True}},
+            {'$match': {'user_type': 'user', 'added_by': ObjectId(session['user_id'])}},
+            {
+                '$project': {
+                    'id': '$_id',
+                    'name': 1,
+                    'email': 1,
+                    'height': 1,
+                    'weight': 1,
+                    'image': 1,
+                    'age': '$health_info.age',
+                    'gender': '$health_info.gender',
+                    'activity': '$health_info.activity',
+                    'diet': '$health_info.diet',
+                    'smoking': '$health_info.smoking',
+                    'alcohol': '$health_info.alcohol',
+                    'conditions': '$health_info.conditions',
+                    'medications': '$health_info.medications',
+                    'family_history': '$health_info.family_history',
+                    'sleep': '$health_info.sleep',
+                    'stress': '$health_info.stress'
+                }
+            }
+        ]))
 
-        # Fetch patients added by the current admin
-        patients = list(users_collection.find({
-            'is_patient': True,
-            'added_by': session['user_id']
-        }, {
-            '_id': 1, 
-            'name': 1, 
-            'email': 1, 
-            'phone': 1, 
-            'height': 1,
-            'weight': 1,
-            'image': 1
-        }))
-
-        # Convert ObjectId to string for template use
-        for patient in patients:
-            patient['_id'] = str(patient['_id'])
-
-        # Fetch monthly new patients added in the past year
         one_year_ago = datetime.now() - timedelta(days=365)
         monthly_new_patients = list(users_collection.aggregate([
             {'$match': {'user_type': 'user', 'created_at': {'$gte': one_year_ago}}},
@@ -395,7 +413,6 @@ def admin_dashboard():
         months = [row['_id'] for row in monthly_new_patients]
         counts = [row['count'] for row in monthly_new_patients]
 
-        # Dashboard statistics
         total_patients = users_collection.count_documents({'user_type': 'user'})
         new_patients = users_collection.count_documents({
             'user_type': 'user',
@@ -413,7 +430,7 @@ def admin_dashboard():
         flash(f'Error fetching data: {str(e)}', 'danger')
         return redirect(url_for('login'))
 
-    return render_template('Doctors/admin_dashboard.html',
+    return render_template('/Doctors/admin_dashboard.html',
                            user_name=user_name,
                            user_email=user_email,
                            user_image=user_image,
@@ -424,48 +441,6 @@ def admin_dashboard():
                            total_appointments=total_appointments,
                            pending_appointments=pending_appointments)
 
-
-@app.route('/show_patients')
-def show_patients():
-    if not session.get('is_admin'):
-        flash('Access denied!', 'danger')
-        return redirect(url_for('login'))
-
-    user_name = session.get('user_name')
-    user_email = session.get('user_email')
-    user_image = session.get('user_image')
-
-    try:
-        users_collection = db.users
-        # Fetch patients added by the current admin
-        patients = list(users_collection.find({
-            'is_patient': True,
-            'added_by': session['user_id']
-        }, {
-            '_id': 1, 
-            'name': 1, 
-            'email': 1, 
-            'phone': 1, 
-            'height': 1,
-            'weight': 1,
-            'image': 1
-        }))
-    except Exception as e:
-        flash(f'An error occurred while fetching patients: {str(e)}', 'danger')
-        patients = []
-
-    return render_template('show_patients.html', 
-                           user_name=user_name, 
-                           user_email=user_email, 
-                           user_image=user_image, 
-                           patients=patients)
-
-
-#========================================================Super Admin/main Admin Route===========================================================
-#========================================================Super Admin/main Admin Route===========================================================
-
-#========================================================multiplediseasesdoctor Route===========================================================
-#========================================================multiplediseasesdoctor Route===========================================================
 
 @app.route('/multiplediseasesdoctor')
 def multiplediseasesdoctor():
@@ -481,6 +456,8 @@ def multiplediseasesdoctor():
                            user_name=user_name, user_email=user_email,
                            user_image=user_image,)
 
+#========================================================Super Admin/main Admin Route===========================================================
+#========================================================Super Admin/main Admin Route===========================================================
 
 @app.route('/superbord')
 def superbord():
@@ -569,9 +546,9 @@ def super_admin_dashboard():
     )
 
 
-
 #========================================================SignUp Route===========================================================
 #========================================================SignUP Route===========================================================
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     # If the user is already logged in, redirect based on their role
@@ -593,11 +570,6 @@ def signup():
         users_collection = db.users
 
         try:
-            # Check if the email already exists
-            if users_collection.find_one({'email': email}):
-                flash('Email already exists. Please use a different email.', 'danger')
-                return render_template('/Auth/signup.html')
-
             # Create the new user data
             new_user = {
                 "name": name,
@@ -616,11 +588,16 @@ def signup():
             flash('Sign up successful! You can now log in.', 'success')
             return redirect(url_for('login'))
 
+        except DuplicateKeyError:
+            # If email already exists, MongoDB raises a DuplicateKeyError if email is unique
+            flash('Email already exists. Please use a different email.', 'danger')
+
         except Exception as e:
             # Catch any other exceptions and rollback the operation
             flash(f'Error: {str(e)}', 'danger')
 
     return render_template('/Auth/signup.html')
+
 
 #========================================================Forget Password Route===========================================================
 #========================================================ForgetPassword Route===========================================================
@@ -733,6 +710,15 @@ def update_password():
     return render_template('Auth/update_password.html', is_admin=is_admin, is_super_admin=is_super_admin)
 
 
+#========================================================Logout Route==============================================================
+#========================================================Logout Route==============================================================
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('login'))
+
+
 #========================================================Direct Add Doctor/Admin Route===========================================================
 #========================================================Direct Add Doctor/Admin Route===========================================================
 @app.route('/register', methods=['GET', 'POST'])
@@ -796,8 +782,6 @@ def register():
 
 #========================================================Profile Page for All Route===========================================================
 #========================================================Profile Page for All Route===========================================================
-
-
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     if not session.get('user_id'):
@@ -836,7 +820,7 @@ def profile():
         health_info_collection = db.user_health_info
         
         # Update user profile
-        update_query = {'_id': ObjectId(session['user_id'])}  # Convert user_id to ObjectId
+        update_query = {'_id': session['user_id']}
         update_data = {
             '$set': {
                 'name': name,
@@ -850,7 +834,7 @@ def profile():
         
         # Update health info
         health_info_data = {
-            'user_id': ObjectId(session['user_id']),  # Convert user_id to ObjectId
+            'user_id': session['user_id'],
             'height': height,
             'weight': weight,
             'age': age,
@@ -866,7 +850,7 @@ def profile():
             'stress': stress
         }
         health_info_collection.update_one(
-            {'user_id': ObjectId(session['user_id'])},  # Convert user_id to ObjectId
+            {'user_id': session['user_id']},
             {'$set': health_info_data},
             upsert=True
         )
@@ -886,8 +870,8 @@ def profile():
         users_collection = db.users
         health_info_collection = db.user_health_info
         
-        user = users_collection.find_one({'_id': ObjectId(session['user_id'])})  # Convert user_id to ObjectId
-        health_info = health_info_collection.find_one({'user_id': ObjectId(session['user_id'])})  # Convert user_id to ObjectId
+        user = users_collection.find_one({'_id': session['user_id']})
+        health_info = health_info_collection.find_one({'user_id': session['user_id']})
         
         if user:
             user_data = {
@@ -929,7 +913,6 @@ def profile():
         
 #=-================================================Doctore profile ======================================================================
 #===================================================Docotre Profile =================================================================        
-
 @app.route('/doctorprofile', methods=['GET', 'POST'])
 def doctorprofile():
     if not session.get('is_admin'):
@@ -958,7 +941,6 @@ def doctorprofile():
         sleep = request.form.get('sleep')
         stress = request.form.get('stress')
 
-        # Handle image upload if present
         image = None
         if 'image' in request.files:
             file = request.files['image']
@@ -970,137 +952,111 @@ def doctorprofile():
         users_collection = db.users
         health_info_collection = db.user_health_info
 
-        try:
-            # Convert session user_id to ObjectId for MongoDB query
-            user_id = ObjectId(session['user_id'])
-
-            # Update user profile in the users collection
-            update_query = {'_id': user_id}
-            update_data = {
-                '$set': {
-                    'name': name,
-                    'email': email,
-                    'height': height,
-                    'weight': weight,
-                    'image': image if image else session['user_image']  # Use new image if uploaded
-                }
-            }
-            users_collection.update_one(update_query, update_data)
-
-            # Update health information in user_health_info collection
-            health_info_data = {
+        # Update user profile
+        update_query = {'_id': session['user_id']}
+        update_data = {
+            '$set': {
+                'name': name,
+                'email': email,
                 'height': height,
                 'weight': weight,
-                'age': age,
-                'gender': gender,
-                'activity': activity,
-                'diet': diet,
-                'smoking': smoking,
-                'alcohol': alcohol,
-                'conditions': conditions,
-                'medications': medications,
-                'family_history': family_history,
-                'sleep': sleep,
-                'stress': stress
+                'image': image
             }
-            health_info_collection.update_one(
-                {'user_id': user_id},
-                {'$set': health_info_data},
-                upsert=True  # Insert if not existing
-            )
+        }
+        users_collection.update_one(update_query, update_data)
 
-            # Update session data
-            session['user_name'] = name
-            session['user_email'] = email
-            session['user_height'] = height
-            session['user_weight'] = weight
-            session['user_image'] = image if image else session['user_image']
+        # Update health info
+        health_info_data = {
+            'height': height,
+            'weight': weight,
+            'age': age,
+            'gender': gender,
+            'activity': activity,
+            'diet': diet,
+            'smoking': smoking,
+            'alcohol': alcohol,
+            'conditions': conditions,
+            'medications': medications,
+            'family_history': family_history,
+            'sleep': sleep,
+            'stress': stress
+        }
+        health_info_collection.update_one(
+            {'user_id': session['user_id']},
+            {'$set': health_info_data},
+            upsert=True
+        )
 
-            flash('Profile updated successfully!', 'success')
-            return redirect(url_for('doctorprofile'))
+        # Update the session data with the new profile information
+        session['user_name'] = name
+        session['user_email'] = email
+        session['user_height'] = height
+        session['user_weight'] = weight
+        session['user_image'] = image if image else session['user_image']
 
-        except Exception as e:
-            logging.error(f'Error occurred during profile update: {e}')
-            flash('An error occurred while updating your profile.', 'danger')
-            return redirect(url_for('doctorprofile'))
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('doctorprofile'))
 
     else:
-        # Handle the profile view (GET request)
+        # Handle the profile view
         users_collection = db.users
         health_info_collection = db.user_health_info
 
-        try:
-            # Convert session user_id to ObjectId for MongoDB query
-            user_id = ObjectId(session['user_id'])
+        user = users_collection.find_one({'_id': session['user_id']})
+        health_info = health_info_collection.find_one({'user_id': session['user_id']})
 
-            # Fetch user and health info from MongoDB
-            user = users_collection.find_one({'_id': user_id})
-            health_info = health_info_collection.find_one({'user_id': user_id})
-
-            if user:
-                user_data = {
-                    'id': user.get('_id'),
-                    'name': user.get('name'),
-                    'email': user.get('email'),
-                    'height': user.get('height'),
-                    'weight': user.get('weight'),
-                    'image': user.get('image', 'default_image.jpg'),  # Default image if none
-                    'health_info': health_info if health_info else {
-                        'height': None,
-                        'weight': None,
-                        'age': None,
-                        'gender': None,
-                        'activity': None,
-                        'diet': None,
-                        'smoking': None,
-                        'alcohol': None,
-                        'conditions': None,
-                        'medications': None,
-                        'family_history': None,
-                        'sleep': None,
-                        'stress': None
-                    }
+        if user:
+            user_data = {
+                'id': user.get('_id'),
+                'name': user.get('name'),
+                'email': user.get('email'),
+                'height': user.get('height'),
+                'weight': user.get('weight'),
+                'image': user.get('image', 'default.jpg'),  # Default image if user has none
+                'health_info': health_info if health_info else {
+                    'height': None,
+                    'weight': None,
+                    'age': None,
+                    'gender': None,
+                    'activity': None,
+                    'diet': None,
+                    'smoking': None,
+                    'alcohol': None,
+                    'conditions': None,
+                    'medications': None,
+                    'family_history': None,
+                    'sleep': None,
+                    'stress': None
                 }
+            }
 
-                # Update session with user profile info
-                session['user_name'] = user_data['name']
-                session['user_email'] = user_data['email']
-                session['user_height'] = user_data['height']
-                session['user_weight'] = user_data['weight']
-                session['user_image'] = user_data['image']
+            # Update the session data with the user's profile information
+            session['user_name'] = user_data['name']
+            session['user_email'] = user_data['email']
+            session['user_height'] = user_data['height']
+            session['user_weight'] = user_data['weight']
+            session['user_image'] = user_data['image']
 
-                return render_template('Doctors/doctorprofile.html', user=user_data,
-                                       user_name=user_name, user_email=user_email, user_image=user_image)
-            else:
-                flash('User not found.', 'danger')
-                return redirect(url_for('login'))
-
-        except Exception as e:
-            logging.error(f'Error occurred while fetching user profile: {e}')
-            flash('An error occurred while retrieving your profile.', 'danger')
+            return render_template('Doctors/doctorprofile.html', user=user_data,
+                                   user_name=user_name, user_email=user_email, user_image=user_image)
+        else:
+            flash('User not found.', 'danger')
             return redirect(url_for('login'))
-
+ 
 
 
 #========================================================Health Data Route===========================================================
 #========================================================Health Data Route===========================================================
-@app.route('/user/<string:user_id>')  # Use string instead of int
+@app.route('/user/<int:user_id>')
 def user_dashboard(user_id):
     users_collection = db.users
     health_info_collection = db.user_health_info
     
-    try:
-        # Convert user_id to ObjectId
-        user_object_id = ObjectId(user_id)
-    except:
-        flash('Invalid user ID format.', 'danger')
-        return redirect(url_for('home'))  # Redirect to home if the user_id is invalid
-    
     # Fetch user health data
-    health_data = health_info_collection.find_one({'user_id': user_object_id})  # Convert user_id
+    health_data = health_info_collection.find_one({'user_id': user_id})
     
     # Fetch user name and image
-    user_info = users_collection.find_one({'_id': user_object_id})  # Convert user_id
+    user_info = users_collection.find_one({'_id': user_id})
 
     # Define fixed example data (for demonstration purposes)
     example_data = {
@@ -1154,24 +1110,17 @@ def user_dashboard(user_id):
     else:
         health_tips.append("Continue avoiding excessive alcohol consumption to protect your liver.")
 
-    if health_data.get('sleep'):
-        try:
-            sleep_hours = int(health_data['sleep'])  # Convert 'sleep' to int
-        except ValueError:
-            sleep_hours = None  # Handle invalid conversion
-        
-        if sleep_hours and sleep_hours < 7:
-            health_tips.append("Ensure you get at least 7-8 hours of sleep each night.")
-        else:
-            health_tips.append("Maintain your healthy sleep routine to keep your energy levels up.")
+    if health_data.get('sleep') and health_data['sleep'] < 7:
+        health_tips.append("Ensure you get at least 7-8 hours of sleep each night.")
+    else:
+        health_tips.append("Maintain your healthy sleep routine to keep your energy levels up.")
 
     if health_data.get('activity') == 'Low':
         health_tips.append("Increase your physical activity to at least 30 minutes a day.")
     else:
         health_tips.append("Keep up your active lifestyle to stay fit and healthy.")
 
-    return render_template('/users/health_data.html', health_data=health_data, user_data=user_data, health_tips=health_tips, example_data=example_data)  
-
+    return render_template('/users/health_data.html', health_data=health_data, user_data=user_data, health_tips=health_tips, example_data=example_data)
 
 
 
@@ -1199,13 +1148,6 @@ def add_patient():
 
         try:
             users_collection = db.users
-
-            # Check if the email already exists
-            existing_user = users_collection.find_one({'email': email})
-            if existing_user:
-                flash('A user with this email already exists.', 'danger')
-                return redirect(url_for('add_patient'))
-
             # Insert new patient into MongoDB
             result = users_collection.insert_one({
                 'name': name,
@@ -1226,18 +1168,19 @@ def add_patient():
             flash(f'An error occurred while adding the patient: {str(e)}', 'danger')
             return redirect(url_for('add_patient'))
 
-    # If GET request, fetch patients
     user_name = session.get('user_name')
     user_email = session.get('user_email')
     user_image = session.get('user_image')
 
+    # Fetch the patients added by the current admin
     try:
         users_collection = db.users
-        # Fetch patients added by the current admin
+        # Fetch patients from MongoDB
         patients = list(users_collection.find({
             'is_patient': True,
             'added_by': session['user_id']
         }, {'_id': 1, 'name': 1, 'email': 1, 'phone': 1, 'image': 1}))
+
     except Exception as e:
         flash(f'An error occurred while fetching patients: {str(e)}', 'danger')
         patients = []
@@ -1247,12 +1190,9 @@ def add_patient():
 
 
 
-
 #========================================================View Patient Admin Route===========================================================
 #========================================================View Patient Admin Route===========================================================
-from bson import ObjectId
-
-@app.route('/view_patient/<patient_id>', methods=['GET'])
+@app.route('/view_patient/<int:patient_id>', methods=['GET'])
 def view_patient(patient_id):
     if not session.get('is_admin'):
         flash('Access denied!', 'danger')
@@ -1260,14 +1200,11 @@ def view_patient(patient_id):
     
     user_name = session.get('user_name')
     user_email = session.get('user_email')
-    user_image = session.get('user_image') or 'default_image.jpg'
+    user_image = session.get('user_image') or 'default_image.jpg'  # Provide a default image if None
 
     try:
         users_collection = db.users
         health_info_collection = db.user_health_info
-
-        # Convert patient_id from string to ObjectId
-        patient_id = ObjectId(patient_id)
 
         # Fetch patient basic information
         patient = users_collection.find_one({
@@ -1288,9 +1225,7 @@ def view_patient(patient_id):
         flash(f'Error fetching patient details: {str(e)}', 'danger')
         return redirect(url_for('admin_dashboard'))
 
-    return render_template('Doctors/view_patient.html', 
-                           patient=patient, 
-                           health_info=health_info,
+    return render_template('Doctors/view_patient.html', patient=patient, health_info=health_info,
                            user_name=user_name, 
                            user_email=user_email, 
                            user_image=user_image)
@@ -1300,9 +1235,7 @@ def view_patient(patient_id):
 
 #========================================================Update Patient Admin Route===========================================================
 #========================================================Update Patient Admin Route===========================================================
-from bson import ObjectId  # Import ObjectId for working with MongoDB ObjectIds
-
-@app.route('/update_patient/<patient_id>', methods=['GET', 'POST'])
+@app.route('/update_patient/<int:patient_id>', methods=['GET', 'POST'])
 def update_patient(patient_id):
     if not session.get('is_admin'):
         flash('Access denied!', 'danger')
@@ -1310,7 +1243,7 @@ def update_patient(patient_id):
     
     user_name = session.get('user_name')
     user_email = session.get('user_email')
-    user_image = session.get('user_image') or 'default_image.jpg'
+    user_image = session.get('user_image') or 'default_image.jpg'  # Provide a default image if None
 
     users_collection = db.users
 
@@ -1329,9 +1262,8 @@ def update_patient(patient_id):
             image.save(image_path)
 
         try:
-            # Update patient information using ObjectId
             users_collection.update_one(
-                {'_id': ObjectId(patient_id), 'is_patient': True},
+                {'_id': patient_id, 'is_patient': True},
                 {'$set': {'name': name, 'email': email, 'height': height, 'weight': weight, 'image': image_filename}}
             )
             flash('Patient information updated successfully!', 'success')
@@ -1342,9 +1274,8 @@ def update_patient(patient_id):
 
     # Fetch the current information for the patient
     try:
-        # Find the patient using ObjectId
         patient = users_collection.find_one(
-            {'_id': ObjectId(patient_id), 'is_patient': True},
+            {'_id': patient_id, 'is_patient': True},
             {'_id': 1, 'name': 1, 'email': 1, 'height': 1, 'weight': 1, 'image': 1}
         )
 
@@ -1363,9 +1294,7 @@ def update_patient(patient_id):
 
 #========================================================Delete Patient Admin Route===========================================================
 #========================================================Delete Patient Admin Route===========================================================
-from bson import ObjectId  # Import this to work with MongoDB ObjectId
-
-@app.route('/delete_patient/<patient_id>', methods=['POST'])
+@app.route('/delete_patient/<int:patient_id>', methods=['POST'])
 def delete_patient(patient_id):
     if not session.get('is_admin'):
         flash('Access denied!', 'danger')
@@ -1374,11 +1303,8 @@ def delete_patient(patient_id):
     users_collection = db.users
 
     try:
-        # Convert the string patient_id to ObjectId
-        object_id = ObjectId(patient_id)
-        
         # Delete the patient document
-        result = users_collection.delete_one({'_id': object_id, 'is_patient': True})
+        result = users_collection.delete_one({'_id': patient_id, 'is_patient': True})
 
         if result.deleted_count > 0:
             flash('Patient deleted successfully!', 'success')
@@ -1390,10 +1316,8 @@ def delete_patient(patient_id):
     return redirect(url_for('admin_dashboard'))
 
 
-
 #========================================================Appointment Route===========================================================
 #========================================================Appointment Route===========================================================
-
 
 @app.route('/appointment', methods=['GET', 'POST'])
 def appointment():
@@ -1407,14 +1331,11 @@ def appointment():
     if request.method == 'POST':
         patient_name = request.form['name']
         patient_email = request.form['email']
-        doctor_id = request.form['doctor']  # Doctor ID from form (string)
+        doctor_id = request.form['doctor']
         appointment_date = request.form['date']
         appointment_time = request.form['time']
 
         try:
-            # Convert doctor_id to ObjectId to match MongoDB format
-            doctor_id = ObjectId(doctor_id)
-
             # Check if doctor exists
             doctor = doctors_collection.find_one({'_id': doctor_id})
 
@@ -1432,7 +1353,6 @@ def appointment():
                 # Generate a random password and hash it
                 password = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
                 hashed_password = generate_password_hash(password)
-                
                 # Insert new patient into the users collection
                 users_collection.insert_one({
                     'name': patient_name,
@@ -1440,10 +1360,7 @@ def appointment():
                     'password': hashed_password,
                     'user_type': 'user'
                 })
-                
-                # Fetch the newly created patient's ID
                 patient_id = users_collection.find_one({'email': patient_email})['_id']
-                
                 # Send the password to the new user
                 send_email(patient_email, patient_name, 'account_creation', password=password)
             else:
@@ -1478,8 +1395,7 @@ def appointment():
                            user_email=session.get('user_email'),
                            user_height=session.get('user_height'),
                            user_weight=session.get('user_weight'),
-                           user_image=session.get('user_image'))  
-
+                           user_image=session.get('user_image'))
 
 @app.route('/get_doctors')
 def get_doctors():
@@ -1590,6 +1506,7 @@ def admin_patient_appointments(patient_id):
         flash('Access denied!', 'danger')
         return redirect(url_for('login'))
 
+    # Get MongoDB collections
     appointments_collection = db.appointments
     users_collection = db.users
 
@@ -1597,42 +1514,32 @@ def admin_patient_appointments(patient_id):
     doctor_name = None
 
     try:
-        if not ObjectId.is_valid(patient_id):
-            flash('Invalid patient ID.', 'danger')
-            return redirect(url_for('admin_dashboard'))
-
         # Fetch the first doctor's details for the patient
         appointment = appointments_collection.find_one({'patient_id': ObjectId(patient_id)})
-
+        
         if appointment:
-            doctor_id = appointment.get('doctor_id')
-            if ObjectId.is_valid(doctor_id):
-                doctor_details = users_collection.find_one({'_id': ObjectId(doctor_id)})
-                if doctor_details:
-                    doctor_name = doctor_details.get('name')
+            doctor_id = appointment['doctor_id']
+            doctor_details = users_collection.find_one({'_id': ObjectId(doctor_id)})
+
+            if doctor_details:
+                doctor_name = doctor_details['name']
 
         if request.method == 'POST':
-            appointment_id = request.form.get('appointment_id')
-            action = request.form.get('action')
+            appointment_id = request.form['appointment_id']
+            action = request.form['action']
             new_date = request.form.get('new_date')
             new_time = request.form.get('new_time')
-
-            if not ObjectId.is_valid(appointment_id):
-                flash('Invalid appointment ID.', 'danger')
-                return redirect(url_for('admin_patient_appointments', patient_id=patient_id))
 
             if action == 'approve':
                 appointments_collection.update_one(
                     {'_id': ObjectId(appointment_id)},
                     {'$set': {'status': 'Approved'}}
                 )
-                appointment_details = f"Your appointment with Dr. {doctor_name} on {appointment['appointment_date']} at {appointment['appointment_time']} has been approved."
             elif action == 'reject':
                 appointments_collection.update_one(
                     {'_id': ObjectId(appointment_id)},
                     {'$set': {'status': 'Rejected'}}
                 )
-                appointment_details = f"Your appointment with Dr. {doctor_name} on {appointment['appointment_date']} at {appointment['appointment_time']} has been rejected."
             elif action == 'reschedule' and new_date and new_time:
                 appointments_collection.update_one(
                     {'_id': ObjectId(appointment_id)},
@@ -1642,15 +1549,7 @@ def admin_patient_appointments(patient_id):
                         'schedule_change_request_date': None
                     }}
                 )
-                appointment_details = f"Your appointment with Dr. {doctor_name} has been rescheduled to {new_date} at {new_time}."
-
             flash('Appointment status updated successfully!', 'success')
-
-            # Send email notification
-            patient_email = appointment.get('patient_email')
-            patient_name = appointment.get('patient_name')
-            send_email(patient_email, username=patient_name, message_type='appointment_notification', appointment_details=appointment_details)
-
             return redirect(url_for('admin_patient_appointments', patient_id=patient_id))
 
         # Fetch all appointments for the patient
@@ -1664,17 +1563,18 @@ def admin_patient_appointments(patient_id):
 
 
 
-
 #========================================================Appointment Show by User Route===========================================================
 #========================================================Appointmemt Show by User Route===========================================================
-from datetime import datetime
 
-def format_time_string(time_str):
-    """Convert time string in HH:MM format to HH:MM AM/PM format."""
-    # Parse the time string into a datetime object
-    time_obj = datetime.strptime(time_str, "%H:%M")
-    # Format it in AM/PM format
-    return time_obj.strftime("%I:%M %p")
+def format_timedelta(td):
+    """Convert timedelta to a string in HH:MM AM/PM format."""
+    total_seconds = int(td.total_seconds())
+    hours, remainder = divmod(total_seconds, 3600)
+    minutes, _ = divmod(remainder, 60)
+    period = 'AM' if hours < 12 else 'PM'
+    hours = hours % 12
+    hours = 12 if hours == 0 else hours
+    return f"{hours:02}:{minutes:02} {period}"
 
 @app.route('/user_appointments')
 def user_appointments():
@@ -1697,9 +1597,7 @@ def user_appointments():
         
         # Format appointment times if necessary
         for appointment in appointments:
-            if isinstance(appointment['appointment_time'], str):
-                # Format the time string
-                appointment['appointment_time'] = format_time_string(appointment['appointment_time'])
+            appointment['appointment_time'] = format_timedelta(appointment['appointment_time'])
 
         # Fetch doctor details for each appointment
         for appointment in appointments:
@@ -1717,6 +1615,7 @@ def user_appointments():
                            user_name=user_name, 
                            user_email=user_email, 
                            user_image=user_image)
+
 
 
 
@@ -1772,7 +1671,6 @@ def search_doctor():
 
 
 
-
 #=============================================Contact=============================================================================
 #=============================================Contact=============================================================================
 contact_collection = db.contact_messages
@@ -1813,7 +1711,6 @@ def contact():
 #===============================================Blog Start=======================================================
 #===============================================Blog Start=========================================================
 
-
 @app.route('/blog')
 def blog():
     if 'user_id' not in session:
@@ -1825,12 +1722,8 @@ def blog():
     user_email = session.get('user_email')
     user_image = session.get('user_image')
 
-    # Convert the user_id to ObjectId
-    try:
-        user = users_collection.find_one({'_id': ObjectId(user_id)})
-    except Exception as e:
-        flash(f'Error fetching user: {str(e)}', 'danger')
-        return redirect(url_for('login'))
+    # Fetch user details from MongoDB
+    user = users_collection.find_one({'_id': user_id})
 
     if not user:
         flash('User not found!', 'danger')
@@ -1847,7 +1740,6 @@ def blog():
 #========================================================Medical Packages Start===========================================================
 applications_collection = db.applications
 packages_collection = db.packages
-
 @app.route('/apply/<package_name>', methods=['GET', 'POST'])
 def apply(package_name):
     if 'user_id' not in session:
@@ -1880,10 +1772,10 @@ def apply(package_name):
     package = packages_collection.find_one({'name': package_name})
     
     if package:
-        return render_template('users/MedicalPackages.html', package=package,
-                               user_name=user_name, 
-                               user_email=user_email, 
-                               user_image=user_image)
+        return render_template('/users/MedicalPackages.html', package=package,
+                           user_name=user_name, 
+                           user_email=user_email, 
+                           user_image=user_image)
     else:
         flash('Package not found.', 'danger')
         return redirect('/')
